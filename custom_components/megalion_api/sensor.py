@@ -106,6 +106,8 @@ def gen_detail_desc(entry: dict[str, Any]) -> MegalionSensorEntityDescription:
     native_unit_of_measurement=None
     state_class=None
     suggested_display_precision=None
+    entity_category=None
+
     match unit:
         case "A":
             device_class=SensorDeviceClass.CURRENT
@@ -139,6 +141,14 @@ def gen_detail_desc(entry: dict[str, Any]) -> MegalionSensorEntityDescription:
             device_class=SensorDeviceClass.TEMPERATURE,
             native_unit_of_measurement=UnitOfTemperature.CELSIUS,
             state_class=SensorStateClass.MEASUREMENT,
+    if entry['propertyName'] in
+        ["bmsVersion", "reportTime", "relayControlStatus",
+         "min_voltage_location", "max_voltage_location",
+         "min_temperature_location", "pcsProtocolType", "online_voltage_count",
+         "online_temperature_count", "rackStatus", "systemWorkMode",
+         "systemOperationStatus", "online_cluster_count",
+         "online_module_count"]:
+        entity_category = EntityCategory.DIAGNOSTIC,
 
     return MegalionSensorEntityDescription(
         key=entry['propertyName'],
@@ -147,6 +157,7 @@ def gen_detail_desc(entry: dict[str, Any]) -> MegalionSensorEntityDescription:
         state_class=state_class,
         suggested_display_precision=suggested_display_precision,
         name=entry['propertyNameEn'],
+        entity_category=entity_category,
         value_fn=lambda sn, status: get_value_or_note(get_property(status.batteries[sn], entry['propertyName'])),
     )
 
