@@ -134,13 +134,13 @@ def gen_detail_desc(entry: dict[str, Any]) -> MegalionSensorEntityDescription:
             state_class=SensorStateClass.MEASUREMENT
             suggested_display_precision=1
         case "%":
-            device_class=SensorDeviceClass.BATTERY,
-            native_unit_of_measurement=UnitOfRatio.PERCENTAGE,
-            state_class=SensorStateClass.MEASUREMENT,
+            device_class=SensorDeviceClass.BATTERY
+            native_unit_of_measurement=UnitOfRatio.PERCENTAGE
+            state_class=SensorStateClass.MEASUREMENT
         case "℃":
-            device_class=SensorDeviceClass.TEMPERATURE,
-            native_unit_of_measurement=UnitOfTemperature.CELSIUS,
-            state_class=SensorStateClass.MEASUREMENT,
+            device_class=SensorDeviceClass.TEMPERATURE
+            native_unit_of_measurement=UnitOfTemperature.CELSIUS
+            state_class=SensorStateClass.MEASUREMENT
     if entry['propertyName'] in [ "bmsVersion", "reportTime",
                                  "relayControlStatus", "min_voltage_location",
                                  "max_voltage_location",
