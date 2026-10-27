@@ -114,7 +114,7 @@ def gen_detail_desc(entry: dict[str, Any]) -> MegalionSensorEntityDescription:
             native_unit_of_measurement=UnitOfElectricCurrent.AMPERE
             state_class=SensorStateClass.MEASUREMENT
         case "Ah":
-            native_unit_of_measurement=unit,
+            native_unit_of_measurement=unit
             state_class=SensorStateClass.MEASUREMENT
         case "kW":
             device_class=SensorDeviceClass.POWER
