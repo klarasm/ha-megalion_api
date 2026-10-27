@@ -1,9 +1,6 @@
 {
   "domain": "megalion_api",
   "name": "Megalion API",
-  "categories": [
-	  "energy.solar_batteries"
-  ],
   "codeowners": [
     "@klarasm"
   ],
