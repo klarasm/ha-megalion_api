@@ -141,14 +141,16 @@ def gen_detail_desc(entry: dict[str, Any]) -> MegalionSensorEntityDescription:
             device_class=SensorDeviceClass.TEMPERATURE,
             native_unit_of_measurement=UnitOfTemperature.CELSIUS,
             state_class=SensorStateClass.MEASUREMENT,
-    if entry['propertyName'] in
-        ["bmsVersion", "reportTime", "relayControlStatus",
-         "min_voltage_location", "max_voltage_location",
-         "min_temperature_location", "pcsProtocolType", "online_voltage_count",
-         "online_temperature_count", "rackStatus", "systemWorkMode",
-         "systemOperationStatus", "online_cluster_count",
-         "online_module_count"]:
-        entity_category = EntityCategory.DIAGNOSTIC,
+    if entry['propertyName'] in [ "bmsVersion", "reportTime",
+                                 "relayControlStatus", "min_voltage_location",
+                                 "max_voltage_location",
+                                 "min_temperature_location", "pcsProtocolType",
+                                 "online_voltage_count",
+                                 "online_temperature_count", "rackStatus",
+                                 "systemWorkMode", "systemOperationStatus",
+                                 "online_cluster_count", "online_module_count"
+                                 ]:
+        entity_category = EntityCategory.DIAGNOSTIC
 
     return MegalionSensorEntityDescription(
         key=entry['propertyName'],
