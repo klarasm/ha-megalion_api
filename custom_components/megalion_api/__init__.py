@@ -1,5 +1,6 @@
 """The Megalion API integration."""
 
+import logging
 from megalion_http import Auth, MegalionHubAPI
 
 from homeassistant.config_entries import ConfigEntry
@@ -9,13 +10,11 @@ from homeassistant.helpers.aiohttp_client import async_get_clientsession
 
 from .coordinator import MegalionConfigEntry, MegalionCoordinator
 
-# TODO List the platforms that you want to support.
-# For your initial PR, limit it to 1 platform.
+_LOGGER = logging.getLogger(__name__)
+
 _PLATFORMS: list[Platform] = [Platform.SENSOR]
 
-
-# TODO Update entry annotation
-async def async_setup_entry(hass: HomeAssistant, entry: MegalionConfigEntry) -> None:
+async def async_setup_entry(hass: HomeAssistant, entry: MegalionConfigEntry) -> bool:
     """Set up Megalion API from a config entry."""
 
     auth = Auth(async_get_clientsession(hass), entry.data[CONF_HOST], "")
@@ -26,8 +25,8 @@ async def async_setup_entry(hass: HomeAssistant, entry: MegalionConfigEntry) -> 
 
     await hass.config_entries.async_forward_entry_setups(entry, _PLATFORMS)
 
+    return True
 
-# TODO Update entry annotation
 async def async_unload_entry(hass: HomeAssistant, entry: MegalionConfigEntry) -> None:
     """Unload a config entry."""
     await hass.config_entries.async_unload_platforms_or_raise(entry, _PLATFORMS)
