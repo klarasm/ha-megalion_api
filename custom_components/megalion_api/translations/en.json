@@ -18,7 +18,7 @@
                 "data_description": {
                     "host": "The hostname of the Megalion API server, try server.zh.megalion.cn if unsure",
                     "password": "The password of the Megalion API user",
-                    "username": "The username of the Megalion API user"
+                    "username": "The username/email of the Megalion API user"
                 }
             }
         }
