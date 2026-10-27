@@ -15,7 +15,7 @@ _PLATFORMS: list[Platform] = [Platform.SENSOR]
 
 
 # TODO Update entry annotation
-async def async_setup_entry(hass: HomeAssistant, entry: MegalionConfigEntry) -> bool:
+async def async_setup_entry(hass: HomeAssistant, entry: MegalionConfigEntry) -> None:
     """Set up Megalion API from a config entry."""
 
     auth = Auth(async_get_clientsession(hass), entry.data[CONF_HOST], "")
@@ -25,7 +25,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: MegalionConfigEntry) -> 
     entry.runtime_data = coordinator
 
     await hass.config_entries.async_forward_entry_setups(entry, _PLATFORMS)
-    return True
+
 
 # TODO Update entry annotation
 async def async_unload_entry(hass: HomeAssistant, entry: MegalionConfigEntry) -> None:
