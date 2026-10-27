@@ -13,5 +13,6 @@
   "quality_scale": "bronze",
   "requirements": ["megalion-http==0.0.1"],
   "ssdp": [],
+  "version": "0.0.1",
   "zeroconf": []
 }
