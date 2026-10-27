@@ -1,0 +1,20 @@
+{
+  "domain": "megalion_api",
+  "name": "Megalion API",
+  "categories": [
+	  "energy.solar_batteries"
+  ],
+  "codeowners": [
+    "@klarasm"
+  ],
+  "config_flow": true,
+  "dependencies": [],
+  "documentation": "https://www.home-assistant.io/integrations/megalion_api",
+  "homekit": {},
+  "integration_type": "hub",
+  "iot_class": "cloud_polling",
+  "quality_scale": "bronze",
+  "requirements": ["megalion-http==0.0.1"],
+  "ssdp": [],
+  "zeroconf": []
+}
