@@ -5,7 +5,7 @@ import logging
 from collections.abc import Callable
 from dataclasses import dataclass
 from typing import override, Any
-import datetime
+import datetime as dt
 
 from homeassistant.components.sensor import (
     SensorDeviceClass,
@@ -40,6 +40,8 @@ class MegalionSensorEntityDescription(SensorEntityDescription):
 
     value_fn: Callable[[str, MegalionStatus], str | float | int]
 
+def fromutcisoformat(iso: str) -> dt.datetime:
+    return dt.datetime.replace(dt.datetime.fromisoformat(iso), tzinfo=dt.UTC)
 
 BATTERY_SENSORS: tuple[MegalionSensorEntityDescription, ...] = (
     MegalionSensorEntityDescription(
@@ -72,13 +74,15 @@ BATTERY_SENSORS: tuple[MegalionSensorEntityDescription, ...] = (
     ),
     MegalionSensorEntityDescription(
         key="lastOfflineTimeUtc",
-        value_fn=lambda sn, status: status.batteries[sn].lastOfflineTimeUtc,
+        device_class=SensorDeviceClass.TIMESTAMP,
+        value_fn=lambda sn, status: fromutcisoformat(status.batteries[sn].lastOfflineTimeUtc),
         entity_category = EntityCategory.DIAGNOSTIC,
         name="Offline Since",
     ),
     MegalionSensorEntityDescription(
         key="lastOnlineTimeUtc",
-        value_fn=lambda sn, status: status.batteries[sn].lastOnlineTimeUtc,
+        device_class=SensorDeviceClass.TIMESTAMP,
+        value_fn=lambda sn, status: fromutcisoformat(status.batteries[sn].lastOnlineTimeUtc),
         entity_category = EntityCategory.DIAGNOSTIC,
         name="Online Since",
     ),
@@ -107,6 +111,7 @@ def gen_detail_desc(entry: dict[str, Any]) -> MegalionSensorEntityDescription:
     state_class=None
     suggested_display_precision=None
     entity_category=None
+    value_fn=lambda sn, status: get_value_or_note(get_property(status.batteries[sn], entry['propertyName']))
 
     match unit:
         case "A":
@@ -141,6 +146,7 @@ def gen_detail_desc(entry: dict[str, Any]) -> MegalionSensorEntityDescription:
             device_class=SensorDeviceClass.TEMPERATURE
             native_unit_of_measurement=UnitOfTemperature.CELSIUS
             state_class=SensorStateClass.MEASUREMENT
+
     if entry['propertyName'] in [ "bmsVersion", "reportTime",
                                  "relayControlStatus", "min_voltage_location",
                                  "max_voltage_location",
@@ -152,6 +158,9 @@ def gen_detail_desc(entry: dict[str, Any]) -> MegalionSensorEntityDescription:
                                  "online_cluster_count", "online_module_count"
                                  ]:
         entity_category = EntityCategory.DIAGNOSTIC
+    if entry['propertyName'] == "reportTime":
+        device_class=SensorDeviceClass.TIMESTAMP
+        value_fn=lambda sn, status: fromutcisoformat(get_value_or_note(get_property(status.batteries[sn], entry['propertyName'])))
 
     return MegalionSensorEntityDescription(
         key=entry['propertyName'],
@@ -161,7 +170,7 @@ def gen_detail_desc(entry: dict[str, Any]) -> MegalionSensorEntityDescription:
         suggested_display_precision=suggested_display_precision,
         name=entry['propertyNameEn'],
         entity_category=entity_category,
-        value_fn=lambda sn, status: get_value_or_note(get_property(status.batteries[sn], entry['propertyName'])),
+        value_fn=value_fn
     )
 
 def batt_fw(batt: dict[str, Any]) -> str:
